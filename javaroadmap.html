@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Java DSA Roadmap Tracker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  .section {
+    margin: 15px 0;
+    padding: 15px;
+    background: #1e293b;
+    border-radius: 10px;
+  }
+  .section h2 {
+    cursor: pointer;
+  }
+  .content {
+    margin-top: 10px;
+  }
+  label {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+  input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+  }
+  .progress {
+    margin: 20px 0;
+    height: 25px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: #22c55e;
+    width: 0%;
+    text-align: center;
+    line-height: 25px;
+    color: black;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<h1>Java DSA Roadmap Tracker</h1>
+
+<div class="progress">
+  <div class="progress-bar" id="progressBar">0%</div>
+</div>
+
+<div id="roadmap"></div>
+
+<script>
+const roadmapData = [
+  {
+    title: "Phase 0: Foundation",
+    items: [
+      "Arrays Basics", "Time Complexity", "Space Complexity",
+      "Reverse Array", "Max/Min", "Prefix Sum", "Frequency Count"
+    ]
+  },
+  {
+    title: "Phase 1: Java for DSA",
+    items: [
+      "ArrayList", "HashMap", "HashSet",
+      "Stack", "Queue",
+      "Frequency Map Problems",
+      "Remove Duplicates",
+      "First Non-Repeating Character"
+    ]
+  },
+  {
+    title: "Phase 2: Recursion",
+    items: [
+      "Base Case", "Recursive Relation", "Call Stack",
+      "Print Numbers", "Factorial", "Reverse String",
+      "Subsequences", "Binary Search Recursive"
+    ]
+  },
+  {
+    title: "Phase 3: Backtracking",
+    items: [
+      "Pick/Not Pick Pattern",
+      "Subsets", "Permutations",
+      "Combination Sum", "N-Queens"
+    ]
+  },
+  {
+    title: "Phase 4: Core DSA",
+    items: [
+      "Sliding Window", "Two Pointers",
+      "Longest Substring", "Maximum Subarray",
+      "Hashing", "Two Sum", "Subarray Sum K",
+      "Stack Problems", "Next Greater Element",
+      "Linked List Reverse", "Cycle Detection",
+      "Binary Search", "Binary Search on Answer",
+      "Trees BFS/DFS", "Tree Height", "LCA"
+    ]
+  },
+  {
+    title: "Phase 5: Advanced",
+    items: [
+      "Greedy", "Heap (PriorityQueue)",
+      "Graphs BFS/DFS", "Dynamic Programming"
+    ]
+  },
+  {
+    title: "Phase 6: LeetCode Strategy",
+    items: [
+      "2 Problems Daily",
+      "1 Easy + 1 Medium",
+      "30 min Rule",
+      "Re-solve Problems",
+      "Revisit after 2 days"
+    ]
+  }
+];
+
+const container = document.getElementById("roadmap");
+
+function loadState() {
+  return JSON.parse(localStorage.getItem("progress") || "{}");
+}
+
+function saveState(state) {
+  localStorage.setItem("progress", JSON.stringify(state));
+}
+
+function updateProgress() {
+  const checkboxes = document.querySelectorAll("input[type='checkbox']");
+  const checked = document.querySelectorAll("input[type='checkbox']:checked");
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const bar = document.getElementById("progressBar");
+  bar.style.width = percent + "%";
+  bar.innerText = percent + "%";
+}
+
+function render() {
+  const state = loadState();
+
+  roadmapData.forEach((section, si) => {
+    const div = document.createElement("div");
+    div.className = "section";
+
+    const title = document.createElement("h2");
+    title.innerText = section.title;
+    title.onclick = () => {
+      content.style.display = content.style.display === "none" ? "block" : "none";
+    };
+
+    const content = document.createElement("div");
+    content.className = "content";
+
+    section.items.forEach((item, ii) => {
+      const id = `${si}-${ii}`;
+      const label = document.createElement("label");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = state[id] || false;
+
+      checkbox.onchange = () => {
+        state[id] = checkbox.checked;
+        saveState(state);
+        updateProgress();
+      };
+
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(item));
+      content.appendChild(label);
+    });
+
+    div.appendChild(title);
+    div.appendChild(content);
+    container.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+render();
+</script>
+
+</body>
+</html>
